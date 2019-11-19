@@ -3,34 +3,72 @@
 import subprocess
 import shutil
 import sys
+import os
 
-option=sys.argv[1]
-
-if option=='on':
+def enable_limited_access():
     try:
         shutil.copy('/etc/.nsswitch.conf.limited.internet.on', '/etc/nsswitch.conf')
-        shutil.copy('/etc/.hosts.limited.internet.on', '/etc/hosts')
+        build_hosts()
         print("[+] limited internet = ON.")
         subprocess.call(['killall', 'firefox'])
     except PermissionError:
         print("[-] Permission denied. Try running with sudo.")
         sys.exit()
-    except FileNotFoundError:
-        print("[-] The file /etc/.hosts.limited.internet.on was not found. Please create one!")
-        sys.exit()
-elif option == 'off':
+
+def disable_limited_access():
     try:
         shutil.copy('/etc/.nsswitch.conf.limited.internet.off', '/etc/nsswitch.conf')
-        shutil.copy('/etc/.hosts.limited.internet.off', '/etc/hosts')
+        shutil.copy('/etc/.hosts.bak', '/etc/hosts')
         print("[+] limited internet = OFF.")
     except PermissionError:
         print("[-] Permission denied. Try running with sudo.")
         sys.exit() 
-    except FileNotFoundError:
-        print("[-] The file /etc/.hosts.limited.internet.off was not found. Please create one!")
-        sys.exit()
 
-subprocess.call(['sudo', 'systemctl', 'stop', 'nscd'])
-subprocess.call(['sudo', 'systemctl', 'stop', 'NetworkManager'])
-subprocess.call(['sudo', 'systemctl', 'start', 'nscd'])
-subprocess.call(['sudo', 'systemctl', 'start', 'NetworkManager'])
+def refresh_nsswitch():
+    subprocess.call(['sudo', 'systemctl', 'stop', 'nscd'])
+    subprocess.call(['sudo', 'systemctl', 'stop', 'NetworkManager'])
+    subprocess.call(['sudo', 'systemctl', 'start', 'nscd'])
+    subprocess.call(['sudo', 'systemctl', 'start', 'NetworkManager'])
+
+def init_config_files():
+    if (not os.path.exists('/etc/.nsswitch.conf.limited.internet.on')):
+        shutil.copy('/etc/nsswitch.conf', '/etc/.nsswitch.conf.limited.internet.on')
+    if (not os.path.exists('/etc/.nsswitch.conf.limited.internet.off')):
+        shutil.copy('/etc/nsswitch.conf', '/etc/.nsswitch.conf.limited.internet.off')
+
+    if (not os.path.exists('/etc/.hosts.bak')):
+        shutil.copy('/etc/hosts', '/etc/.hosts.bak')
+
+def build_hosts():
+    # start with a clean /etc/hosts and then build it from websites.txt
+    shutil.copy('/etc/.hosts.bak', '/etc/hosts')
+
+    websites_file = open(scriptdir  + '/websites.txt', 'rt')
+    websites = websites_file.readlines()
+
+    hosts_file = open('/etc/hosts', 'at')
+    for line in websites:
+        command = "nslookup " + line.strip() +  " | grep Address | head -2 | tail -1 | awk '{print $2}'"
+        ip = subprocess.getoutput(command )
+        hosts_file.write(ip)
+        hosts_file.write('\t')
+        hosts_file.write(line)
+
+    hosts_file.close()
+    websites_file.close()
+
+
+
+
+
+
+scriptdir = os.path.abspath(os.path.dirname(sys.argv[0]))
+option = sys.argv[1]
+
+
+if option=='on':
+    enable_limited_access()
+elif option == 'off':
+    disable_limited_access()
+
+refresh_nsswitch()
