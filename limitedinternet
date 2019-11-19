@@ -1,0 +1,36 @@
+#!/usr/bin/python3
+
+import subprocess
+import shutil
+import sys
+
+option=sys.argv[1]
+
+if option=='on':
+    try:
+        shutil.copy('/etc/.nsswitch.conf.limited.internet.on', '/etc/nsswitch.conf')
+        shutil.copy('/etc/.hosts.limited.internet.on', '/etc/hosts')
+        print("[+] limited internet = ON.")
+        subprocess.call(['killall', 'firefox'])
+    except PermissionError:
+        print("[-] Permission denied. Try running with sudo.")
+        sys.exit()
+    except FileNotFoundError:
+        print("[-] The file /etc/.hosts.limited.internet.on was not found. Please create one!")
+        sys.exit()
+elif option == 'off':
+    try:
+        shutil.copy('/etc/.nsswitch.conf.limited.internet.off', '/etc/nsswitch.conf')
+        shutil.copy('/etc/.hosts.limited.internet.off', '/etc/hosts')
+        print("[+] limited internet = OFF.")
+    except PermissionError:
+        print("[-] Permission denied. Try running with sudo.")
+        sys.exit() 
+    except FileNotFoundError:
+        print("[-] The file /etc/.hosts.limited.internet.off was not found. Please create one!")
+        sys.exit()
+
+subprocess.call(['sudo', 'systemctl', 'stop', 'nscd'])
+subprocess.call(['sudo', 'systemctl', 'stop', 'NetworkManager'])
+subprocess.call(['sudo', 'systemctl', 'start', 'nscd'])
+subprocess.call(['sudo', 'systemctl', 'start', 'NetworkManager'])
