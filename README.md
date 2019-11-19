@@ -6,7 +6,6 @@ limited internet off:    access to all websites
 
 Works with
   * Systemd
-  * Firefox
 
 It works by changing the
     **/etc/nsswitch.conf** and
