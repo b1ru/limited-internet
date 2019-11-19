@@ -1,7 +1,7 @@
 # limitedinternet
 
 
-limited internet on :    access to specific websites
+limited internet on :    access to specific websites  
 limited internet off:    access to all websites
 
 Works with
@@ -9,8 +9,8 @@ Works with
   * Firefox
 
 It works by changing the
-    /etc/nsswitch.conf and
-    /etc/hosts
+    **/etc/nsswitch.conf** and
+    **/etc/hosts**
 files.
 
 The following files must be defined
