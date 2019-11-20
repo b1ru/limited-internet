@@ -1,19 +1,21 @@
 # limitedinternet
 
+Currently only works with **systemd**.
 
-limited internet on :    access to specific websites  
-limited internet off:    access to all websites
+## How to use
+**limitedinternet on**: enable limited mode (access to certain websites only)  
+**limitedinternet off**: disable limited mode (access to all websites)
 
-Works with
-  * Systemd
+* In the directory you downloaded the script, create a file calles **websites.txt**.
+* This files should contain all the websites you want to have access to, when on limited mode.
+* Write a website per line.
 
-It works by changing the
-    **/etc/nsswitch.conf** and
-    **/etc/hosts**
-files.
+Example websites.txt file:
 
-The following files must be defined
-   * /etc/.hosts.limited.internet.on
-   * /etc/.hosts.limited.internet.off
-   * /etc/.nsswitch.conf.limited.internet.on
-   * /etc/.nsswitch.conf.limited.internet.off
+```
+www.facebook.com
+youtube.com  
+reddit.com
+```
+
+(Don't write https:// or http//)
