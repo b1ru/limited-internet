@@ -19,3 +19,5 @@ reddit.com
 ```
 
 (Don't write https:// or http//)
+
+That's it!
