@@ -43,8 +43,12 @@ def build_hosts():
     # start with a clean /etc/hosts and then build it from websites.txt
     shutil.copy('/etc/.hosts.bak', '/etc/hosts')
 
-    websites_file = open(scriptdir  + '/websites.txt', 'rt')
-    websites = websites_file.readlines()
+    try:
+        websites_file = open(scriptdir  + '/websites.txt', 'rt')
+        websites = websites_file.readlines()
+    except FileNotFoundError:
+        print("[-] Create a file called websites.txt on the directory you downloaded the script.")
+        sys.exit()
 
     hosts_file = open('/etc/hosts', 'at')
     for line in websites:
