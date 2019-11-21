@@ -10,7 +10,6 @@ def enable_limited_access():
         shutil.copy('/etc/.nsswitch.conf.limited.internet.on', '/etc/nsswitch.conf')
         build_hosts()
         print("[+] limited internet = ON.")
-        subprocess.call(['killall', 'firefox'])
     except PermissionError:
         print("[-] Permission denied. Try running with sudo.")
         sys.exit()
