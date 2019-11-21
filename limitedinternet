@@ -61,7 +61,18 @@ def build_hosts():
     hosts_file.close()
     websites_file.close()
 
+def append_other_entries(option):
+    input_file_name = 'other_' + option + '.txt' 
+    input_file_name_full = scriptdir + '/' + input_file_name
+    if  os.path.exists(input_file_name_full):
+        input_file = open(input_file_name_full)
+        entries = input_file.read()
 
+        hosts_file = open('/etc/hosts', 'at')
+        hosts_file.write(entries)
+
+        hosts_file.close()
+        input_file.close()
 
 
 
@@ -75,4 +86,5 @@ if option=='on':
 elif option == 'off':
     disable_limited_access()
 
+append_other_entries(option)
 refresh_nsswitch()
