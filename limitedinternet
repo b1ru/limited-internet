@@ -51,6 +51,8 @@ def build_hosts():
 
     hosts_file = open('/etc/hosts', 'at')
     for line in websites:
+        if not line.strip():
+            continue
         command = "nslookup " + line.strip() +  " | grep Address | head -2 | tail -1 | awk '{print $2}'"
         ip = subprocess.getoutput(command )
         hosts_file.write(ip)
