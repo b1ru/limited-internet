@@ -21,3 +21,21 @@ reddit.com
 (Don't write https:// or http//)
 
 That's it!
+
+### If you use `/etc/hosts` for other purposes read on
+
+In case, you want to add additional entries to your `/etc/hosts` either when limitedinternet is on or off,
+create 2 files on the directory the script was downloaded:
+
+* `other_on.txt`  
+additional entries for when limitedinternet is on
+* `other_off.txt`  
+additional entries for when limitedinternet is off
+
+Those files are appended to `/etc/hosts` as is. So, they must be (ip address, domain name) pairs separated by whitespace.
+
+Example `other_off.txt` file:
+```
+1.2.3.4     my.name
+1.1.1.1     wo.w
+```
