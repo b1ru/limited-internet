@@ -17,8 +17,8 @@ www.facebook.com
 youtube.com  
 reddit.com
 ```
-
-(Don't write https:// or http//)
+(Don't write https:// or http//)  
+(You may need to restart your browser after turning limitedinternet on.)
 
 That's it!
 
