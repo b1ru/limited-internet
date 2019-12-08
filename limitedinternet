@@ -81,6 +81,7 @@ def append_other_entries(option):
 scriptdir = os.path.abspath(os.path.dirname(sys.argv[0]))
 option = sys.argv[1]
 
+init_config_files()
 
 if option=='on':
     enable_limited_access()
