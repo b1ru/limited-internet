@@ -2,6 +2,11 @@
 
 Currently only works with **systemd**.
 
+**WARNING: THERE IS A BUG**
+To make the script work, after the first time you run it, manually edit the file /etc/.nsswitch.conf.limited.internet.on
+and from the line  that starts with **hosts**, delete the word **dns** (if it's there).
+This will be fixed.
+
 ## How to use
 **limitedinternet on**: enable limited mode (access to certain websites only)  
 **limitedinternet off**: disable limited mode (access to all websites)
